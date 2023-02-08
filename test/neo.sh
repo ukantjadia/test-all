@@ -2,16 +2,16 @@
 set -o nounset                              # Treat unset variables as an error
 
 # Check if existing nvim config is present, if yes, then createing bakup at ~/bak.nvim
-#if [ -f ~/.config/nvim/init.vim ] || [ -f ~/.config/nvim/init.lua ]; then
-#    mv ~/.config/nvim/ ~/bak.nvim
-#    echo 'createing bakup of existing neovim config at ~/bak.nvim'
-##    echo '[-] Existing nvim init config file found in ~/.config/nvim/. Please backup or remove it first before running this script.'
-#fi
-#
-#sleep 1
-#mkdir -p ~/.config/nvim
-#
-#sleep 1
+if [ -f ~/.config/nvim/init.vim ] || [ -f ~/.config/nvim/init.lua ]; then
+    mv ~/.config/nvim/ ~/bak.nvim
+    echo 'createing bakup of existing neovim config at ~/bak.nvim'
+#    echo '[-] Existing nvim init config file found in ~/.config/nvim/. Please backup or remove it first before running this script.'
+fi
+
+sleep 1
+mkdir -p ~/.config/nvim
+
+sleep 1
 echo '[*] Installing dependencies ...'
 if [[ "$OSTYPE" = "darwin"* ]]; then
     brew install \
@@ -48,13 +48,13 @@ else
     done
 fi
 
+NEOVIM_VERSION=0.7.0
 cd ~/.config/nvim
 echo "[*] Installing neovim ..."
-wget "https://github.com/neovim/neovim/releases/download/stable/nvim-linux64.tar.gz" 
+wget "https://github.com/neovim/neovim/releases/download/v$NEOVIM_VERSION/nvim-linux64.tar.gz" 
 mkdir -p ~/.local/bin
 tar xf ~/.config/nvim/nvim-linux64.tar.gz -C ~/.local
 read -p 'Want neovim for all user'
-if 
 ln -sf $(readlink -f ~/.local/nvim-linux64/bin/nvim) ~/.local/bin/nvim
 
 # Adding path 
@@ -99,7 +99,7 @@ nvim -c 'PlugInstall' -c 'qa'
 
 # Copy init.vim and lua scripts in current working directory to nvim's config location
 echo '[*] Copying init.vim & lua/ -> ~/.config/nvim/'
-cp -r ./init.vim ./lua/ ~/.config/nvim/
+cp -r ./init.vim ./lua ~/.config/nvim/
 
 echo -e "[+] Done, welcome to your new \033[1m\033[92mneovim\033[0m experience! Try it by running: nvim. (NOTE, remember to: source $SHELL_CONFIG_FILE) Want to customize it? Modify ~/.config/nvim/init.vim! Remember to change your terminal font to a nerd font :)"
 
